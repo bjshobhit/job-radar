@@ -1,0 +1,155 @@
+# Job Radar configuration. Edit freely — no code changes needed.
+
+# ----------------------------------------------------------------------------
+# WATCHLIST: companies whose careers pages (via their ATS) you want to monitor.
+# Find a company's ATS by visiting its careers page and checking the URL:
+#   boards.greenhouse.io/<slug>   -> put <slug> under greenhouse
+#   jobs.lever.co/<slug>          -> put <slug> under lever
+#   jobs.ashbyhq.com/<slug>       -> put <slug> under ashby
+# The slugs below are a STARTER set — verify/extend for the companies you want.
+# ----------------------------------------------------------------------------
+watchlist:
+  # All slugs below are VERIFIED working as of 2026-06-28. Add your own freely.
+  greenhouse:
+    - groww          # India
+    - phonepe        # India
+    - postman        # India/global
+    - druva          # India/global
+    - netskope       # India/global
+    - rubrik
+    - airbnb
+    - stripe
+    - databricks
+    - coinbase
+    - robinhood
+    - pinterest
+    - gitlab
+    - elastic
+    - mongodb
+    - cloudflare
+    - twilio
+  lever:
+    - cred           # India
+    - meesho         # India
+    - epifi          # India (Fi Money)
+    - zeta           # India
+  ashby:
+    - sarvam         # India (Sarvam AI)
+    - perplexity
+    - linear
+    - vercel
+    - openai
+    - mercor
+    - ramp
+    - notion
+
+# ----------------------------------------------------------------------------
+# DISCOVERY: broad search across free job APIs (beyond your watchlist).
+# Adzuna needs free keys (ADZUNA_APP_ID / ADZUNA_APP_KEY as GitHub Secrets);
+# if not set, Adzuna is skipped automatically. Remotive needs no key.
+# ----------------------------------------------------------------------------
+discovery:
+  enabled: true
+  queries:
+    - "backend engineer"
+    - "software engineer backend"
+    - "java backend"
+    - "python backend"
+  remotive_search: "backend"
+
+# ----------------------------------------------------------------------------
+# FILTERS (case-insensitive, word-boundary aware — "java" != "javascript").
+# A job is sent only if its title matches an include keyword AND no exclude one.
+# ----------------------------------------------------------------------------
+include_keywords:
+  - backend
+  - back-end
+  - back end
+  - backend engineer
+  - backend developer
+  - software engineer
+  - software development engineer
+  - sde
+  - sde-1
+  - sde 1
+  - sde-2
+  - sde 2
+  - sde ii
+  - server
+  - server-side
+  - api engineer
+  - platform engineer
+  - distributed systems
+  - microservices
+  - systems engineer
+  - application engineer
+  - java
+  - python
+  - kotlin
+
+exclude_keywords:
+  - senior staff
+  - staff
+  - principal
+  - architect
+  - lead
+  - manager
+  - director
+  - head of
+  - vp
+  - vice president
+  - founding
+  - intern
+  - internship
+  - trainee
+  - apprentice
+  - frontend
+  - front-end
+  - front end
+  - ui engineer
+  - ux
+  - ios
+  - android
+  - mobile
+  - qa
+  - sdet
+  - test engineer
+  - data scientist
+  - data analyst
+  - machine learning
+  - ml engineer
+  - support
+  - sales
+  - recruiter
+  - designer
+  - product manager
+  - devops
+  - sre
+  - site reliability
+  - salesforce
+  - golang
+  - go developer
+  - rust
+  - scala
+  - c++
+  - c#
+  - .net
+  - php
+  - ruby
+  - node
+  - node.js
+  - javascript
+  - react
+
+# Locations to flag with a star and (optionally) hard-filter on.
+priority_locations:
+  - gurugram
+  - gurgaon
+  - noida
+  - delhi
+  - ncr
+  - remote
+
+# If true, ONLY priority_locations pass. Default false = allow everywhere,
+# just tag NCR/remote roles with a star.
+strict_location: false
