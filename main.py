@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import logging
 import yaml
 from typing import List, Tuple, Set
@@ -71,6 +72,7 @@ def main():
     header = f"\U0001F6A8 {len(selected)} new backend job(s):"
     all_sent = send_telegram(token, chat, header)
     for m in messages:
+        time.sleep(1)  # stay under Telegram's per-chat send rate
         all_sent = send_telegram(token, chat, m) and all_sent
     # Only mark as seen if delivery succeeded, so failures retry next run.
     if all_sent:

@@ -1,5 +1,6 @@
 from models import Job
-from notify import format_job, format_batch, chunk_messages
+from notify import format_job, format_batch, chunk_messages, send_telegram
+import notify
 
 
 def test_format_job_priority_star():
@@ -39,4 +40,40 @@ def test_chunk_messages_respects_limit():
 def test_chunk_messages_single_when_small():
     jobs = [(Job("s", "A", "Backend", "Remote", "http://1"), True)]
     assert len(chunk_messages(jobs)) == 1
+
+
+class _Resp:
+    def __init__(self, status_code, json_data=None):
+        self.status_code = status_code
+        self._json = json_data or {}
+
+    def json(self):
+        return self._json
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise Exception(f"HTTP {self.status_code}")
+
+
+def test_send_telegram_retries_on_429_then_succeeds(monkeypatch):
+    calls = {"n": 0}
+
+    def fake_post(url, json=None, timeout=None):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return _Resp(429, {"parameters": {"retry_after": 1}})
+        return _Resp(200)
+
+    monkeypatch.setattr(notify.requests, "post", fake_post)
+    monkeypatch.setattr(notify.time, "sleep", lambda s: None)
+    assert send_telegram("tok", "chat", "hi") is True
+    assert calls["n"] == 2
+
+
+def test_send_telegram_gives_up_after_retries(monkeypatch):
+    monkeypatch.setattr(notify.requests, "post",
+                        lambda *a, **k: _Resp(429, {"parameters": {"retry_after": 1}}))
+    monkeypatch.setattr(notify.time, "sleep", lambda s: None)
+    assert send_telegram("tok", "chat", "hi", max_retries=3) is False
+
 
