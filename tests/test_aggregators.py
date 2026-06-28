@@ -1,0 +1,73 @@
+from sources.remoteok import parse_remoteok
+from sources.themuse import parse_themuse
+from sources.jobicy import parse_jobicy
+from sources.arbeitnow import parse_arbeitnow
+from sources.himalayas import parse_himalayas
+from sources.smartrecruiters import parse_smartrecruiters
+
+
+def test_parse_remoteok_skips_metadata():
+    data = [{"legal": "RemoteOK API notice"},  # first element is metadata
+            {"position": "Backend Engineer", "company": "Acme",
+             "location": "Remote", "url": "https://remoteok.com/x/1", "date": "2026-06-27"}]
+    jobs = parse_remoteok(data)
+    assert len(jobs) == 1
+    assert jobs[0].title == "Backend Engineer"
+    assert jobs[0].company == "Acme"
+    assert jobs[0].source == "remoteok"
+
+
+def test_parse_themuse():
+    data = {"results": [{"name": "Software Engineer, Backend",
+                         "company": {"name": "Acme"},
+                         "locations": [{"name": "Bengaluru"}, {"name": "Remote"}],
+                         "refs": {"landing_page": "https://themuse.com/jobs/acme/x"},
+                         "publication_date": "2026-06-05T18:30:16Z"}]}
+    jobs = parse_themuse(data)
+    assert jobs[0].title == "Software Engineer, Backend"
+    assert jobs[0].company == "Acme"
+    assert "Bengaluru" in jobs[0].location
+    assert jobs[0].source == "themuse"
+
+
+def test_parse_jobicy():
+    data = {"jobs": [{"jobTitle": "Java Backend Engineer", "companyName": "Binance",
+                      "jobGeo": "APAC", "url": "https://jobicy.com/jobs/1-x",
+                      "pubDate": "2026-06-27"}]}
+    jobs = parse_jobicy(data)
+    assert jobs[0].title == "Java Backend Engineer"
+    assert jobs[0].company == "Binance"
+    assert jobs[0].source == "jobicy"
+
+
+def test_parse_arbeitnow_marks_remote():
+    data = {"data": [{"title": "Backend Developer", "company_name": "Acme",
+                      "location": "Berlin", "url": "https://arbeitnow.com/jobs/x-1",
+                      "remote": True}]}
+    jobs = parse_arbeitnow(data)
+    assert jobs[0].title == "Backend Developer"
+    assert "remote" in jobs[0].location.lower()
+    assert jobs[0].source == "arbeitnow"
+
+
+def test_parse_himalayas_uses_stable_guid():
+    base = {"title": "Backend Engineer", "companyName": "Acme",
+            "locationRestrictions": ["India"], "guid": "https://himalayas.app/c/acme/jobs/be"}
+    a = parse_himalayas({"jobs": [dict(base, applicationLink="https://himalayas.app/apply?t=AAA")]})
+    b = parse_himalayas({"jobs": [dict(base, applicationLink="https://himalayas.app/apply?t=BBB")]})
+    assert a[0].id == b[0].id  # dedup keyed on stable guid, not volatile apply link
+    assert a[0].source == "himalayas"
+
+
+def test_parse_smartrecruiters_stable_id():
+    data = {"content": [{"id": "744000134517094", "name": "Backend Engineer",
+                         "company": {"name": "Wise"},
+                         "location": {"fullLocation": "Bengaluru, India"}}]}
+    jobs = parse_smartrecruiters("Wise", data)
+    assert jobs[0].title == "Backend Engineer"
+    assert jobs[0].company == "Wise"
+    assert "744000134517094" in jobs[0].url
+    assert jobs[0].source == "smartrecruiters"
+    # stable id derived from sr job id, not the (rebuildable) url alone
+    again = parse_smartrecruiters("Wise", data)
+    assert jobs[0].id == again[0].id

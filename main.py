@@ -9,6 +9,7 @@ from filters import matches, is_priority
 from dedup import load_seen, save_seen, partition_new
 from notify import chunk_messages, send_telegram
 from sources import greenhouse, lever, ashby, adzuna, remotive
+from sources import smartrecruiters, remoteok, themuse, jobicy, arbeitnow, himalayas
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("job-radar")
@@ -24,11 +25,26 @@ def collect(cfg) -> List[Job]:
         jobs += lever.fetch(c)
     for c in watchlist.get("ashby", []) or []:
         jobs += ashby.fetch(c)
+    for c in watchlist.get("smartrecruiters", []) or []:
+        jobs += smartrecruiters.fetch(c)
     discovery = cfg.get("discovery", {}) or {}
     if discovery.get("enabled"):
         jobs += adzuna.fetch(os.getenv("ADZUNA_APP_ID"), os.getenv("ADZUNA_APP_KEY"),
                              discovery.get("queries", ["backend"]))
         jobs += remotive.fetch(discovery.get("remotive_search", "backend"))
+        if discovery.get("remoteok"):
+            jobs += remoteok.fetch()
+        if discovery.get("arbeitnow"):
+            jobs += arbeitnow.fetch()
+        if discovery.get("jobicy_tags"):
+            jobs += jobicy.fetch(discovery.get("jobicy_tags"))
+        if discovery.get("himalayas"):
+            jobs += himalayas.fetch(discovery.get("himalayas_limit", 50))
+        muse = discovery.get("themuse") or {}
+        if muse.get("enabled"):
+            jobs += themuse.fetch(muse.get("pages", 3),
+                                  muse.get("categories"),
+                                  muse.get("locations"))
     return jobs
 
 

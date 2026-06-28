@@ -28,6 +28,22 @@ watchlist:
     - mongodb
     - cloudflare
     - twilio
+    - anthropic      # AI, very high pay
+    - scaleai        # Scale AI
+    - lyft
+    - reddit
+    - figma
+    - asana
+    - datadog
+    - brex
+    - nubank
+    - affirm
+    - instacart
+    - roblox
+    - samsara
+    - gusto
+    - discord
+    - airtable
   lever:
     - cred           # India
     - meesho         # India
@@ -42,11 +58,24 @@ watchlist:
     - mercor
     - ramp
     - notion
+    - cursor         # Anysphere
+    - cohere         # AI
+    - character      # Character.AI
+    - watershed
+    - decagon
+    - sierra
+    - baseten
+    - modal
+  # SmartRecruiters ATS — https://api.smartrecruiters.com/v1/companies/<Id>/postings
+  smartrecruiters:
+    - Wise           # high pay, India presence
+    - Visa
 
 # ----------------------------------------------------------------------------
 # DISCOVERY: broad search across free job APIs (beyond your watchlist).
 # Adzuna needs free keys (ADZUNA_APP_ID / ADZUNA_APP_KEY as GitHub Secrets);
-# if not set, Adzuna is skipped automatically. Remotive needs no key.
+# if not set, Adzuna is skipped automatically. The rest need NO key and pull
+# from thousands of companies at once — keyword filters below narrow the flood.
 # ----------------------------------------------------------------------------
 discovery:
   enabled: true
@@ -56,6 +85,20 @@ discovery:
     - "java backend"
     - "python backend"
   remotive_search: "backend"
+  remoteok: true             # remoteok.com/api — global remote jobs
+  arbeitnow: true            # arbeitnow.com — global, many remote
+  jobicy_tags:               # jobicy.com remote jobs, one fetch per tag
+    - backend
+    - java
+    - python
+  himalayas: true            # himalayas.app remote jobs
+  himalayas_limit: 50
+  themuse:                   # themuse.com — company-rich, supports locations
+    enabled: true
+    pages: 3
+    categories:
+      - "Software Engineering"
+    locations: []            # e.g. ["Bengaluru, India", "Flexible / Remote"]
 
 # ----------------------------------------------------------------------------
 # FILTERS (case-insensitive, word-boundary aware — "java" != "javascript").
