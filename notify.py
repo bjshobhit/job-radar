@@ -62,7 +62,11 @@ def send_telegram(token: str, chat_id: str, text: str, max_retries: int = 4) -> 
                             wait, attempt + 1, max_retries)
                 time.sleep(wait)
                 continue
-            r.raise_for_status()
+            if r.status_code >= 400:
+                # Surface Telegram's actual reason (e.g. "chat not found",
+                # "can't parse entities") instead of a bare HTTP code.
+                log.error("telegram %s: %s", r.status_code, r.text)
+                return False
             return True
         except Exception as e:
             log.error("telegram send failed (attempt %d/%d): %s",
