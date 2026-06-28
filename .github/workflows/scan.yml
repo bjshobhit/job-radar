@@ -22,8 +22,8 @@ jobs:
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
       - name: Persist seen state
         run: |
-          git config user.name "job-radar-bot"
-          git config user.email "bot@users.noreply.github.com"
+          git config user.name "bjshobhit"
+          git config user.email "104783891+bjshobhit@users.noreply.github.com"
           git add state/seen.json
           git commit -m "chore: update seen state" || echo "no changes"
           git push
