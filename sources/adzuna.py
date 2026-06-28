@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from models import Job
+from models import Job, make_id
 from sources.base import http_get_json, safe_fetch
 
 
@@ -8,12 +8,18 @@ def parse_adzuna(data: Dict) -> List[Job]:
     for j in data.get("results", []):
         smin = j.get("salary_min")
         salary = str(int(smin)) if smin else None
-        out.append(Job(source="adzuna",
-                       company=(j.get("company") or {}).get("display_name", ""),
-                       title=j.get("title", ""),
-                       location=(j.get("location") or {}).get("display_name", ""),
-                       url=j.get("redirect_url", ""),
-                       posted_at=j.get("created"), salary=salary))
+        company = (j.get("company") or {}).get("display_name", "")
+        title = j.get("title", "")
+        job = Job(source="adzuna", company=company, title=title,
+                  location=(j.get("location") or {}).get("display_name", ""),
+                  url=j.get("redirect_url", ""),
+                  posted_at=j.get("created"), salary=salary)
+        # Adzuna's redirect_url carries a rotating tracking token, so it can't be
+        # used for dedup. Use Adzuna's stable numeric job id instead.
+        aid = j.get("id")
+        if aid:
+            job.id = make_id("adzuna", company, title, f"adzuna-id:{aid}")
+        out.append(job)
     return out
 
 
