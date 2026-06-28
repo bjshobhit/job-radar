@@ -1,7 +1,9 @@
 name: scan
 on:
   schedule:
-    - cron: "*/20 * * * *"
+    # Off-peak minutes (not :00/:20/:40) — GitHub's scheduler is far more
+    # reliable away from the congested top-of-interval boundaries.
+    - cron: "9,29,49 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
