@@ -9,8 +9,8 @@ log = logging.getLogger("job-radar")
 
 def format_job(job: Job, priority: bool) -> str:
     star = "\u2b50 " if priority else ""
-    lines = [f"{star}*{job.company}* — {job.title}",
-             f"\U0001F4CD {job.location or 'N/A'}  ·  _{job.source}_"]
+    lines = [f"{star}{job.company} — {job.title}",
+             f"\U0001F4CD {job.location or 'N/A'}  ·  {job.source}"]
     if job.salary:
         lines.append(f"\U0001F4B0 {job.salary}")
     lines.append(f"\U0001F517 {job.url}")
@@ -45,7 +45,6 @@ def chunk_messages(items: List[Tuple[Job, bool]], limit: int = 3800) -> List[str
 def send_telegram(token: str, chat_id: str, text: str, max_retries: int = 4) -> bool:
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {"chat_id": chat_id, "text": text,
-               "parse_mode": "Markdown",
                "disable_web_page_preview": True}
     for attempt in range(max_retries):
         try:
