@@ -44,11 +44,37 @@ watchlist:
     - gusto
     - discord
     - airtable
+    - dropbox
+    - block          # Square / Cash App
+    - squarespace
+    - faire
+    - gemini         # crypto exchange
+    - hellofresh
+    - amplitude
+    - grafanalabs
+    - cockroachlabs
+    - planetscale
+    - clickhouse
+    - fivetran
+    - webflow
+    - checkr
+    - coursera
+    - udemy
+    - duolingo
+    - flexport
+    - toast
+    - verkada
+    - oura
+    - calendly
+    - okta
   lever:
     - cred           # India
     - meesho         # India
     - epifi          # India (Fi Money)
     - zeta           # India
+    - paytm          # India
+    - fampay         # India
+    - mistral        # AI (Paris)
   ashby:
     - sarvam         # India (Sarvam AI)
     - perplexity
@@ -66,10 +92,22 @@ watchlist:
     - sierra
     - baseten
     - modal
+    - navi           # India
+    - elevenlabs     # AI voice
+    - suno           # AI music
+    - runway         # AI video
+    - langchain
+    - pinecone
+    - weaviate
+    - temporal
+    - vanta
+    - harvey         # legal AI
+    - abridge        # health AI
   # SmartRecruiters ATS — https://api.smartrecruiters.com/v1/companies/<Id>/postings
   smartrecruiters:
     - Wise           # high pay, India presence
     - Visa
+    - Uber
 
 # ----------------------------------------------------------------------------
 # DISCOVERY: broad search across free job APIs (beyond your watchlist).
@@ -93,6 +131,14 @@ discovery:
     - python
   himalayas: true            # himalayas.app remote jobs
   himalayas_limit: 50
+  amazon: true               # amazon.jobs — big tech, strong India (SDE) coverage
+  amazon_queries:
+    - "backend engineer"
+    - "software development engineer"
+    - "java"
+    - "python"
+  netflix: true              # explore.jobs.netflix.net
+  netflix_query: "backend"
   themuse:                   # themuse.com — company-rich, supports locations
     enabled: true
     pages: 3

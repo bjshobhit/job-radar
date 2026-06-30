@@ -10,6 +10,7 @@ from dedup import load_seen, save_seen, partition_new
 from notify import chunk_messages, send_telegram
 from sources import greenhouse, lever, ashby, adzuna, remotive
 from sources import smartrecruiters, remoteok, themuse, jobicy, arbeitnow, himalayas
+from sources import amazon, netflix
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("job-radar")
@@ -40,6 +41,10 @@ def collect(cfg) -> List[Job]:
             jobs += jobicy.fetch(discovery.get("jobicy_tags"))
         if discovery.get("himalayas"):
             jobs += himalayas.fetch(discovery.get("himalayas_limit", 50))
+        if discovery.get("amazon"):
+            jobs += amazon.fetch(discovery.get("amazon_queries", ["backend engineer"]))
+        if discovery.get("netflix"):
+            jobs += netflix.fetch(discovery.get("netflix_query", "backend"))
         muse = discovery.get("themuse") or {}
         if muse.get("enabled"):
             jobs += themuse.fetch(muse.get("pages", 3),

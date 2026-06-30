@@ -4,6 +4,8 @@ from sources.jobicy import parse_jobicy
 from sources.arbeitnow import parse_arbeitnow
 from sources.himalayas import parse_himalayas
 from sources.smartrecruiters import parse_smartrecruiters
+from sources.amazon import parse_amazon
+from sources.netflix import parse_netflix
 
 
 def test_parse_remoteok_skips_metadata():
@@ -71,3 +73,28 @@ def test_parse_smartrecruiters_stable_id():
     # stable id derived from sr job id, not the (rebuildable) url alone
     again = parse_smartrecruiters("Wise", data)
     assert jobs[0].id == again[0].id
+
+
+def test_parse_amazon_builds_url_and_stable_id():
+    data = {"jobs": [{"title": "SDE II, Backend", "company_name": "ADCI",
+                      "location": "IN, KA, Bengaluru",
+                      "job_path": "/en/jobs/10462700/sde-ii-backend",
+                      "id_icims": "10462700", "posted_date": "June 30, 2026"}]}
+    jobs = parse_amazon(data)
+    assert jobs[0].title == "SDE II, Backend"
+    assert jobs[0].company == "Amazon"
+    assert jobs[0].url == "https://www.amazon.jobs/en/jobs/10462700/sde-ii-backend"
+    assert jobs[0].source == "amazon"
+    assert parse_amazon(data)[0].id == jobs[0].id  # stable across runs
+
+
+def test_parse_netflix():
+    data = {"positions": [{"name": "Software Engineer 5 - Backend",
+                           "locations": ["USA - Remote"],
+                           "canonicalPositionUrl": "https://explore.jobs.netflix.net/careers/job/790316090485",
+                           "id": 790316090485, "t_create": 1779926400}]}
+    jobs = parse_netflix(data)
+    assert jobs[0].title == "Software Engineer 5 - Backend"
+    assert jobs[0].company == "Netflix"
+    assert "Remote" in jobs[0].location
+    assert jobs[0].source == "netflix"
