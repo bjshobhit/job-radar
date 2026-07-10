@@ -17,6 +17,7 @@ class Job:
     url: str
     posted_at: Optional[str] = None
     salary: Optional[str] = None
+    description: Optional[str] = None
     id: str = field(default="")
 
     def __post_init__(self):

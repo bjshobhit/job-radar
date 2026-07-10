@@ -6,6 +6,8 @@ from sources.himalayas import parse_himalayas
 from sources.smartrecruiters import parse_smartrecruiters
 from sources.amazon import parse_amazon
 from sources.netflix import parse_netflix
+from sources.greenhouse import parse_greenhouse
+from sources.lever import parse_lever
 
 
 def test_parse_remoteok_skips_metadata():
@@ -98,3 +100,29 @@ def test_parse_netflix():
     assert jobs[0].company == "Netflix"
     assert "Remote" in jobs[0].location
     assert jobs[0].source == "netflix"
+
+
+def test_parse_greenhouse_includes_description():
+    data = {"jobs": [{"title": "Backend Engineer", "location": {"name": "Remote"},
+                      "absolute_url": "https://x", "updated_at": "2026-06-30",
+                      "content": "&lt;p&gt;You have 5+ years of experience&lt;/p&gt;"}]}
+    jobs = parse_greenhouse("acme", data)
+    assert "5+ years of experience" in (jobs[0].description or "")
+
+
+def test_parse_lever_includes_description():
+    data = [{"text": "Backend Engineer", "categories": {"location": "Remote"},
+             "hostedUrl": "https://x",
+             "descriptionPlain": "You bring 2+ years of experience."}]
+    jobs = parse_lever("acme", data)
+    assert "2+ years of experience" in (jobs[0].description or "")
+
+
+def test_parse_amazon_includes_qualifications():
+    data = {"jobs": [{"title": "SDE II, Backend", "company_name": "ADCI",
+                      "location": "IN, KA, Bengaluru",
+                      "job_path": "/en/jobs/1/sde-ii", "id_icims": "1",
+                      "basic_qualifications":
+                          "- 3+ years of non-internship professional software development experience"}]}
+    jobs = parse_amazon(data)
+    assert "3+ years" in (jobs[0].description or "")

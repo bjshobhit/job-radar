@@ -178,6 +178,7 @@ include_keywords:
 
 exclude_keywords:
   - senior staff
+  - senior
   - staff
   - principal
   - architect
@@ -242,3 +243,12 @@ priority_locations:
 # If true, ONLY priority_locations pass. Default false = allow everywhere,
 # just tag NCR/remote roles with a star.
 strict_location: false
+
+# ----------------------------------------------------------------------------
+# EXPERIENCE CEILING: drop jobs that require MORE than this many years of
+# experience. Parsed from the job title + description (where available:
+# greenhouse, lever, amazon). Ranges use the lower bound ("3-5 years" needs 3);
+# jobs with no detectable YOE requirement are kept. "Senior" titles are already
+# excluded via exclude_keywords above. Comment out to disable.
+# ----------------------------------------------------------------------------
+max_years_experience: 3

@@ -7,9 +7,11 @@ def parse_lever(company: str, data: List) -> List[Job]:
     out = []
     for j in data:
         loc = (j.get("categories") or {}).get("location", "")
+        desc = j.get("descriptionPlain") or j.get("description") or None
         out.append(Job(source="lever", company=company,
                        title=j.get("text", ""), location=loc,
-                       url=j.get("hostedUrl", "")))
+                       url=j.get("hostedUrl", ""),
+                       description=desc))
     return out
 
 

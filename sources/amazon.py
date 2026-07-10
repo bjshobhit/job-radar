@@ -10,9 +10,11 @@ def parse_amazon(data: Dict) -> List[Job]:
         url = f"https://www.amazon.jobs{path}" if path else ""
         jid = j.get("id_icims", "")
         title = j.get("title", "")
+        desc = j.get("basic_qualifications") or j.get("description") or None
         job = Job(source="amazon", company="Amazon", title=title,
                   location=j.get("location", "") or j.get("city", ""),
-                  url=url, posted_at=j.get("posted_date"))
+                  url=url, posted_at=j.get("posted_date"),
+                  description=desc)
         if jid:
             job.id = make_id("amazon", "", title, f"amzn-id:{jid}")
         out.append(job)
