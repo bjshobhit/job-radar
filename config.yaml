@@ -67,6 +67,13 @@ watchlist:
     - oura
     - calendly
     - okta
+    # --- expansion 2026-08-07 (verified >0 jobs, India-or-remote filter gates alerts) ---
+    - slice                            # India (fintech, ex-slicepay)
+    - mercury                          # fintech, high pay
+    - turing                           # India-heavy remote
+    - razorpaysoftwareprivatelimited   # India (Razorpay)
+    - gleanwork                        # Glean (enterprise search AI)
+    - togetherai                       # Together AI
   lever:
     - cred           # India
     - meesho         # India
@@ -103,11 +110,18 @@ watchlist:
     - vanta
     - harvey         # legal AI
     - abridge        # health AI
+    # --- expansion 2026-08-07 (verified >0 jobs) ---
+    - plaid          # fintech infra, high pay
+    - supabase       # dev infra
+    - replit         # dev tools
+    - cartesia       # AI voice
+    - sardine        # fraud/fintech
   # SmartRecruiters ATS — https://api.smartrecruiters.com/v1/companies/<Id>/postings
   smartrecruiters:
     - Wise           # high pay, India presence
     - Visa
     - Uber
+    - freshworks     # India (Freshworks)
 
 # ----------------------------------------------------------------------------
 # DISCOVERY: broad search across free job APIs (beyond your watchlist).
@@ -231,18 +245,61 @@ exclude_keywords:
   - javascript
   - react
 
-# Locations to flag with a star and (optionally) hard-filter on.
-priority_locations:
-  - gurugram
-  - gurgaon
-  - noida
-  - delhi
-  - ncr
-  - remote
-
-# If true, ONLY priority_locations pass. Default false = allow everywhere,
-# just tag NCR/remote roles with a star.
-strict_location: false
+# ----------------------------------------------------------------------------
+# LOCATION FILTER: only surface jobs that are in India OR remote/India-eligible.
+# A job is DROPPED only when it is clearly region-locked to a blocked region
+# (e.g. "Remote - US") or clearly based in another country (e.g. "London, UK").
+# Jobs with a blank/vague location are KEPT and tagged "unverified".
+#   india_tokens    -> Indian cities/regions -> classified INDIA (star)
+#   remote_tokens   -> words that signal remote work
+#   global_tokens   -> "remote + global" -> India-eligible (star)
+#   blocked_regions -> other countries/regions; drop unless India also present
+#                      (India always wins). "us" is bare on purpose (word-bound).
+# Edit these lists freely; matching is case-insensitive and word-boundary aware.
+# ----------------------------------------------------------------------------
+location:
+  mode: india_or_remote
+  india_tokens:
+    - india
+    - bengaluru
+    - bangalore
+    - mumbai
+    - pune
+    - hyderabad
+    - chennai
+    - gurugram
+    - gurgaon
+    - noida
+    - delhi
+    - ncr
+    - kolkata
+    - ahmedabad
+    - jaipur
+  remote_tokens:
+    - remote
+    - work from home
+    - wfh
+    - anywhere
+  global_tokens:
+    - worldwide
+    - global
+    - anywhere
+  blocked_regions:
+    - united states
+    - usa
+    - us
+    - emea
+    - europe
+    - uk
+    - united kingdom
+    - canada
+    - latam
+    - singapore
+    - dubai
+    - germany
+    - san francisco
+    - new york
+    - london
 
 # ----------------------------------------------------------------------------
 # EXPERIENCE CEILING: drop jobs that require MORE than this many years of

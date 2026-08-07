@@ -1,6 +1,7 @@
 import re
 from typing import Dict, Optional
 from models import Job
+from location import location_ok
 
 
 def _has_kw(text: str, keywords) -> bool:
@@ -60,10 +61,6 @@ def matches(job: Job, cfg: Dict) -> bool:
         return False
     if not experience_ok(job, cfg):
         return False
-    if cfg.get("strict_location"):
-        return is_priority(job, cfg)
+    if not location_ok(job, cfg):
+        return False
     return True
-
-
-def is_priority(job: Job, cfg: Dict) -> bool:
-    return _has_kw(job.location or "", cfg.get("priority_locations", []))

@@ -7,9 +7,18 @@ from models import Job
 log = logging.getLogger("job-radar")
 
 
+def _tag(priority: bool) -> str:
+    """Leading marker for a job's title line.
+
+    The location filter only lets INDIA / REMOTE_ELIGIBLE (starred) or
+    location-UNKNOWN jobs through; blocked regions are dropped upstream. So a
+    non-priority job here is always location-UNKNOWN -> flag it "unverified".
+    """
+    return "\u2b50 " if priority else "\U0001F4CD unverified \u00b7 "
+
+
 def format_job(job: Job, priority: bool) -> str:
-    star = "\u2b50 " if priority else ""
-    lines = [f"{star}{job.company} — {job.title}",
+    lines = [f"{_tag(priority)}{job.company} — {job.title}",
              f"\U0001F4CD {job.location or 'N/A'}  ·  {job.source}"]
     if job.salary:
         lines.append(f"\U0001F4B0 {job.salary}")
@@ -20,9 +29,8 @@ def format_job(job: Job, priority: bool) -> str:
 def format_job_with_ats(job: Job, priority: bool, exp_info: str,
                         ats_result: Optional[Dict] = None) -> str:
     """Format a job alert with ATS score and experience info."""
-    star = "\u2b50 " if priority else ""
     lines = [
-        f"\U0001F6A8 {star}{job.company} — {job.title}",
+        f"\U0001F6A8 {_tag(priority)}{job.company} — {job.title}",
         f"\U0001F4CD {job.location or 'N/A'}  ·  {job.source}",
     ]
     if job.salary:

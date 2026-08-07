@@ -5,7 +5,8 @@ import logging
 import yaml
 from typing import List, Tuple, Set
 from models import Job
-from filters import matches, is_priority
+from filters import matches
+from location import classify_location, is_india_star
 from dedup import load_seen, save_seen, partition_new
 from notify import (chunk_messages, send_telegram, send_telegram_document,
                     format_job_with_ats)
@@ -56,7 +57,7 @@ def collect(cfg) -> List[Job]:
 
 def select_new(jobs: List[Job], cfg, seen: Set[str]) -> List[Tuple[Job, bool]]:
     fresh = partition_new([j for j in jobs if matches(j, cfg)], seen)
-    return [(j, is_priority(j, cfg)) for j in fresh]
+    return [(j, is_india_star(classify_location(j, cfg))) for j in fresh]
 
 
 def process_with_resume(selected: List[Tuple[Job, bool]], cfg, token, chat, dry) -> bool:

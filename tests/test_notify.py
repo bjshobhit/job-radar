@@ -1,5 +1,6 @@
 from models import Job
-from notify import format_job, format_batch, chunk_messages, send_telegram
+from notify import (format_job, format_batch, chunk_messages, send_telegram,
+                   format_job_with_ats)
 import notify
 
 
@@ -16,6 +17,23 @@ def test_format_job_no_star_when_not_priority():
     j = Job("lever", "B", "Java Backend", "Noida", "http://2")
     msg = format_job(j, priority=False)
     assert not msg.startswith("\u2b50")
+
+
+def test_format_job_unverified_tag_when_not_priority():
+    # Non-star jobs that survive the filter are location-UNKNOWN -> tag them.
+    j = Job("lever", "B", "Java Backend", "", "http://2")
+    msg = format_job(j, priority=False)
+    assert "unverified" in msg
+    starred = format_job(j, priority=True)
+    assert "unverified" not in starred
+
+
+def test_format_job_with_ats_unverified_tag():
+    j = Job("lever", "B", "Java Backend", "", "http://2")
+    msg = format_job_with_ats(j, False, "exp ok", None)
+    assert "unverified" in msg
+    starred = format_job_with_ats(j, True, "exp ok", None)
+    assert "unverified" not in starred
 
 
 def test_format_batch_joins():

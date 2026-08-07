@@ -1,10 +1,16 @@
 from models import Job
-from filters import matches, is_priority, experience_ok
+from filters import matches, experience_ok
 
 CFG = {
     "include_keywords": ["backend", "software engineer", "java", "python"],
     "exclude_keywords": ["staff", "frontend", "javascript", "golang"],
-    "priority_locations": ["gurugram", "noida", "delhi", "ncr", "remote"],
+    "location": {
+        "mode": "india_or_remote",
+        "india_tokens": ["india", "bengaluru", "gurugram", "noida", "delhi", "ncr"],
+        "remote_tokens": ["remote", "work from home", "wfh", "anywhere"],
+        "global_tokens": ["worldwide", "global", "anywhere"],
+        "blocked_regions": ["us", "usa", "united kingdom", "uk", "london", "singapore"],
+    },
 }
 
 # Config with the years-of-experience ceiling enabled.
@@ -31,16 +37,17 @@ def test_word_boundary_java_not_javascript():
     assert not matches(_job("JavaScript Engineer"), CFG)
 
 
-def test_priority_location():
-    assert is_priority(_job("Backend Engineer", "Gurugram"), CFG)
-    assert is_priority(_job("Backend Engineer", "Remote - India"), CFG)
-    assert not is_priority(_job("Backend Engineer", "Bengaluru"), CFG)
+def test_location_hard_filters_blocked():
+    # Blocked region-locked / other-country jobs are dropped by matches().
+    assert not matches(_job("Backend Engineer", "Remote - US"), CFG)
+    assert not matches(_job("Backend Engineer", "London, UK"), CFG)
 
 
-def test_strict_location_hard_filters():
-    cfg = dict(CFG, strict_location=True)
-    assert matches(_job("Backend Engineer", "Noida"), cfg)
-    assert not matches(_job("Backend Engineer", "Bengaluru"), cfg)
+def test_location_keeps_india_remote_unknown():
+    assert matches(_job("Backend Engineer", "Bengaluru"), CFG)
+    assert matches(_job("Backend Engineer", "Remote - India"), CFG)
+    assert matches(_job("Backend Engineer", "Remote"), CFG)
+    assert matches(_job("Backend Engineer", ""), CFG)
 
 
 # --- Years-of-experience (YOE) filtering -----------------------------------
