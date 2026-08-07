@@ -1,0 +1,64 @@
+personal:
+  name: "Shobhit Jain"
+  phone: "+91 7457873622"
+  email: "bjshobhit8@gmail.com"
+  linkedin: "https://linkedin.com/in/jainn-shobhit"
+  github: "https://github.com/bjshobhit"
+  total_experience_years: 2
+
+summary: >
+  Backend Software Engineer with 2+ years of experience designing and scaling
+  distributed systems, REST APIs, and data-intensive services. Skilled in Java,
+  Spring Boot, SQL, and distributed architecture, with hands-on experience in
+  sharding, caching, graph-based dependency modeling, and production-grade
+  reliability engineering.
+
+education:
+  - degree: "B.Tech in Computer Science and Engineering"
+    institution: "Meerut Institute of Engineering and Technology (MIET), Meerut, India"
+    duration: "August 2021 - July 2025"
+
+experience:
+  - company: "PhonePe"
+    role: "Software Engineer"
+    location: "Pune, India"
+    duration: "Oct 2025 – Present"
+    bullets:
+      - "Engineered distributed execution history and scheduling workflows using scatter-gather architecture across multiple shards, cutting aggregation query time by an estimated ~35% for large-scale operational analytics."
+      - "Designed and shipped backend REST APIs powering execution pipeline visibility, supporting an estimated ~20K+ daily requests from internal engineering tools."
+      - "Implemented production-safe soft-delete architecture across services and databases, eliminating data-consistency incidents during lifecycle management operations."
+      - "Built webhook-driven notification systems with optimized execution summaries, reducing manual reporting overhead for on-call engineers."
+      - "Led database partitioning and automated data-cleanup strategies on large-scale tables, improving query performance by an estimated ~25-30% and reducing storage costs."
+      - "Developing graph-based dependency analysis using Neo4j to model service relationships, enabling intelligent impact analysis for code changes across the platform."
+
+  - company: "Junglee Games India Pvt. Ltd"
+    role: "Software Engineer"
+    location: "Gurugram, India"
+    duration: "July 2024 – Sept 2025"
+    bullets:
+      - "Developed and integrated REST APIs using Spring Boot, optimizing SQL queries to improve application response times by an estimated ~25%."
+      - "Built backend automation systems and authentication flows (JWT/OAuth) supporting scalable, consumer-facing data handling."
+      - "Contributed to microservice-based backend workflows in Java and Spring Boot, participating in architecture discussions and design reviews."
+      - "Improved release stability and engineering productivity through CI/CD pipeline enhancements, reducing deployment friction."
+      - "Debugged and resolved production issues across services, collaborating cross-functionally to improve system reliability."
+
+skills:
+  programming_languages: ["Java", "Python", "JavaScript", "SQL"]
+  frameworks: ["Spring Boot", "RESTful APIs", "Microservices", "Dropwizard", "JWT/OAuth"]
+  databases: ["SQL Server", "PostgreSQL", "Neo4j", "Firebase"]
+  distributed_systems: ["Scatter-Gather Architecture", "Sharding", "Database Partitioning", "Caching", "Graph-Based Dependency Analysis"]
+  tools: ["Git", "GitHub", "GitHub Actions", "Jenkins", "JUnit", "TestNG"]
+  methodologies: ["Agile", "OOP", "Data Structures & Algorithms", "System Design"]
+
+projects:
+  - name: "Healthcare Integration Platform"
+    bullets:
+      - "Built a scalable healthcare system using Spring Boot and Flutter with backend APIs for authentication, scheduling, and medical data management."
+      - "Optimized SQL queries to handle 1M+ records, improving reliability and response time."
+
+  - name: "Realtime Chat App"
+    bullets:
+      - "Built a full-stack chat system using Spring Boot and WebSocket-based real-time messaging, reducing latency by 30%."
+
+certifications:
+  - "AWS Certified Cloud Practitioner (April 2024 – April 2027) — Credential ID: 1e9c2aa021ce4aa1a2ed63cd11cc3e50"

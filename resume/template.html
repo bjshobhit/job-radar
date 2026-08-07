@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@page {
+    size: A4;
+    margin: 1.5cm 2cm;
+}
+body {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 20pt;
+    text-align: center;
+    margin: 0 0 4px 0;
+    color: #0a7e8c;
+}
+.contact {
+    text-align: center;
+    font-size: 9pt;
+    margin-bottom: 12px;
+}
+.contact a {
+    color: #0a7e8c;
+    text-decoration: none;
+}
+h2 {
+    font-size: 11pt;
+    color: #0a7e8c;
+    border-bottom: 1.5px solid #0a7e8c;
+    padding-bottom: 2px;
+    margin: 12px 0 6px 0;
+    text-transform: uppercase;
+}
+.summary {
+    font-size: 9.5pt;
+    margin-bottom: 8px;
+}
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+.exp-title {
+    font-weight: bold;
+    font-size: 10pt;
+}
+.exp-duration {
+    font-size: 9pt;
+    color: #444;
+}
+ul {
+    margin: 3px 0 8px 0;
+    padding-left: 18px;
+}
+li {
+    font-size: 9.5pt;
+    margin-bottom: 2px;
+}
+.skills-grid {
+    font-size: 9.5pt;
+    margin: 4px 0;
+}
+.skills-grid .row {
+    margin-bottom: 3px;
+}
+.skills-grid .label {
+    font-weight: bold;
+    display: inline;
+}
+.project-name {
+    font-weight: bold;
+    font-size: 10pt;
+}
+.cert-list {
+    font-size: 9.5pt;
+}
+</style>
+</head>
+<body>
+<h1>{{ personal.name }}</h1>
+<div class="contact">
+    {{ personal.phone }} | {{ personal.email }} | <a href="{{ personal.linkedin }}">LinkedIn</a>{% if personal.github %} | <a href="{{ personal.github }}">GitHub</a>{% endif %}
+</div>
+
+<h2>Professional Summary</h2>
+<div class="summary">{{ summary }}</div>
+
+<h2>Work Experience</h2>
+{% for exp in experience %}
+<div class="exp-header">
+    <span class="exp-title">{{ exp.role }} | {{ exp.company }}, {{ exp.location }}</span>
+    <span class="exp-duration">{{ exp.duration }}</span>
+</div>
+<ul>
+{% for bullet in exp.bullets %}
+    <li>{{ bullet }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+<h2>Skills</h2>
+<div class="skills-grid">
+{% for category, skills in skills.items() %}
+<div class="row"><span class="label">{{ category }}:</span> {{ skills | join(', ') }}</div>
+{% endfor %}
+</div>
+
+<h2>Projects</h2>
+{% for project in projects %}
+<div class="project-name">{{ project.name }}</div>
+<ul>
+{% for bullet in project.bullets %}
+    <li>{{ bullet }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+<h2>Education</h2>
+{% for edu in education %}
+<div class="exp-header">
+    <span class="exp-title">{{ edu.degree }}</span>
+    <span class="exp-duration">{{ edu.duration }}</span>
+</div>
+<div style="font-size: 9.5pt;">{{ edu.institution }}</div>
+{% endfor %}
+
+<h2>Certifications</h2>
+<ul class="cert-list">
+{% for cert in certifications %}
+    <li>{{ cert }}</li>
+{% endfor %}
+</ul>
+</body>
+</html>

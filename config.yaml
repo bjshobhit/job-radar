@@ -252,3 +252,18 @@ strict_location: false
 # excluded via exclude_keywords above. Comment out to disable.
 # ----------------------------------------------------------------------------
 max_years_experience: 3
+
+# ----------------------------------------------------------------------------
+# TAILORED RESUME: for each matching job, generate an ATS-optimized PDF resume
+# from resume/base.yaml, tailored to the job description, and deliver it via
+# Telegram (sendDocument with an ATS-score caption). Set enabled: false to fall
+# back to plain text batch alerts.
+#   experience_years   -> your real YOE (drives the JD experience match)
+#   max_target_years   -> skip jobs asking for more than this (too senior)
+#   max_resumes_per_run-> cap PDFs generated per run (spam + runtime guard)
+# ----------------------------------------------------------------------------
+resume:
+  enabled: true
+  experience_years: 2
+  max_target_years: 6
+  max_resumes_per_run: 10

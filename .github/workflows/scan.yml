@@ -19,6 +19,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install WeasyPrint system libraries
+        # weasyprint renders the tailored-resume PDFs and needs pango/cairo/
+        # gdk-pixbuf shared libs that aren't on the runner by default.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 libpangocairo-1.0-0 libcairo2 \
+            libgdk-pixbuf-2.0-0 libffi-dev shared-mime-info fonts-dejavu-core
       - run: pip install -r requirements.txt
       - run: python main.py
         env:
